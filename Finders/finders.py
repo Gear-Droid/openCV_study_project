@@ -230,10 +230,10 @@ class SchemeFinder():
             self.contour_img = open_image(self.filename)
         else:
             self.contour_img = copy.deepcopy(self.original_img)
-
-        self.contour_img = cv2.warpAffine(
-            self.contour_img, self.M, (self.cols, self.rows)
-        )
+        if self.M is not None:
+            self.contour_img = cv2.warpAffine(
+                self.contour_img, self.M, (self.cols, self.rows)
+            )
         contour_image = cv2.drawContours(
             self.contour_img, self.contours, -1, (0, 0, 255), -1)
         largest_area, self.largest_contour_index = find_greatest_contour(
@@ -417,6 +417,7 @@ class ResistorsFinder():
         res_img = copy.deepcopy(hsv_scheme)
         res_img[mask2 > 0] = ([179, 0, 255])
         # viewImage("Наложение маски на плату", hsv_scheme)  # 10
+
         return res_img
 
     def to_gray(self, hsv_image):
@@ -454,21 +455,20 @@ class ResistorsFinder():
 
         return res_img
 
-    def contouring(self):
+    def contouring(self, threshold_img, min_area, max_area):
         # Заполнение пробелов
         kernel = np.ones((int(4*self.DELTA), int(6.25*self.DELTA)), np.uint8)
-        self.threshold_img = cv2.morphologyEx(
-            self.threshold_img, cv2.MORPH_CLOSE, kernel
+        new_threshold_img = cv2.morphologyEx(
+            threshold_img, cv2.MORPH_CLOSE, kernel
         )
 
         self.contours, hierarchy = cv2.findContours(
-            self.threshold_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+            new_threshold_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
-        self.contour_img = copy.deepcopy(self.scheme_img)
+        contour_img = copy.deepcopy(self.scheme_img)
         cv2.drawContours(
-            self.contour_img, self.contours, -1, (0, 0, 255), -1
+            contour_img, self.contours, -1, (0, 0, 255), -1
         )
-        min_area, max_area = 5000, 30000
         res = find_contours_by_area(
             self.contours, min_area, max_area
         )
@@ -497,9 +497,10 @@ class ResistorsFinder():
 
         for i in idxs:
             M = cv2.moments(cnt[i])
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            centers.append((cX, cY))
+            if M["m00"] != 0:
+                cX = int(M["m10"] / M["m00"])
+                cY = int(M["m01"] / M["m00"])
+                centers.append((cX, cY))
 
         return centers
 
@@ -512,7 +513,8 @@ class ResistorsFinder():
         self.threshold()
         self.closing()
         self.opening()
-        contours_idxs = self.contouring()
+        img = None
+        contours_idxs = self.contouring(img, min_area, max_area)
 
         # Найдем центры резисторов
         detected_resistors_centers = self.find_centers(

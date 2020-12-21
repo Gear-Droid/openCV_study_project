@@ -1,0 +1,9 @@
+{"1_painted": {"min_H": 70, "min_S": 120, "min_V": 20,
+    "max_H": 90, "max_S": 255, "max_V": 180},
+"1_original": {"source": "Image",
+    "filename": "/home/vlad/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/OpenCV/\u041a\u0443\u0440\u0441\u0430\u0447/prj/scheme_photos/waka.jpg",
+    "DELTA": 0.005, "image filtration": true},
+"1_closing_opening": {"closing_kx": 2.5, "closing_ky": 2.5, "opening_kx": 1.0, "opening_ky": 1.0},
+"1_result": {"image rotation": true},
+"2_paint_resistors": {"min_H": 83, "min_S": 21, "min_V": 170,
+           "max_H": 105, "max_S": 85, "max_V": 240}}
