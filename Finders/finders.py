@@ -87,7 +87,7 @@ def find_contours_by_area(contours, min_area, max_area):
 def get_square_matrix(matrix, dtype="uint8"):
     # Дополняем до квадратного изображения
     if matrix.shape[0] != matrix.shape[1]:
-        z = 0
+        z = None
         if matrix.shape[0] > matrix.shape[1]:
             z = np.zeros((matrix.shape[0], matrix.shape[0]-matrix.shape[1]),
                          dtype)
@@ -196,7 +196,7 @@ class SchemeFinder():
 
     def paint_scheme(self, image, manual=False,
                      green_low=None, green_high=None):
-        if green_low is None and green_high is None:
+        if green_low is None or green_high is None:
             green_low, green_high = get_range(manual)
 
         mask2 = cv2.inRange(image, green_low, green_high)
@@ -333,11 +333,21 @@ class SchemeFinder():
             self.rows, self.cols, _ = image.shape
             image = cv2.warpAffine(image, M, (self.cols, self.rows))
 
+        # print('x -', x, 'y -', y, 'w -', w, 'h -', h)
+
+        res1 = y-int(self.DELTA*h/w)//2
+        res2 = x-int(self.DELTA*w/h)//2
+        if res1 < 0.:
+            res1 = 0
+        if res2 < 0.:
+            res2 = 0
+
         cropped_scheme = image[
-            y-int(self.DELTA*h/w)//2: y+h+int(self.DELTA*h/w)//2+1,
-            x-int(self.DELTA*w/h)//2: x+w+int(self.DELTA*w/h)//2+1,
+            res1: y+h+int(self.DELTA*h/w)//2+1,
+            res2: x+w+int(self.DELTA*w/h)//2+1,
             :
         ]
+
         detected_scheme = cv2.rectangle(
             image,
             (x-int(self.DELTA*w/h)//2, y-int(self.DELTA*h/w)//2),
@@ -514,7 +524,9 @@ class ResistorsFinder():
         self.closing()
         self.opening()
         img = None
-        contours_idxs = self.contouring(img, min_area, max_area)
+        contours_idxs = self.contouring(
+            img, min_area, max_area
+        )
 
         # Найдем центры резисторов
         detected_resistors_centers = self.find_centers(

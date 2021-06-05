@@ -45,6 +45,12 @@ class MainApp(QtWidgets.QMainWindow, design_main.Ui_MainWindow):
         self.camera_label8.setPixmap(pixmap)
         self.camera_label9 = QLabel(self)
         self.camera_label9.setPixmap(pixmap)
+        self.camera_label10 = QLabel(self)
+        self.camera_label10.setPixmap(pixmap)
+        self.camera_label11 = QLabel(self)
+        self.camera_label11.setPixmap(pixmap)
+        self.camera_label12 = QLabel(self)
+        self.camera_label12.setPixmap(pixmap)
 
         # лэйауты для хранения изображений с камеры
         self.horizontalLayout_5.addWidget(self.camera_label1)
@@ -57,6 +63,9 @@ class MainApp(QtWidgets.QMainWindow, design_main.Ui_MainWindow):
         self.horizontalLayout_22.addWidget(self.camera_label7)
         self.horizontalLayout_28.addWidget(self.camera_label8)
         self.horizontalLayout_25.addWidget(self.camera_label9)
+        self.horizontalLayout_31.addWidget(self.camera_label10)
+        self.horizontalLayout_34.addWidget(self.camera_label11)
+        self.horizontalLayout_38.addWidget(self.camera_label12)
 
         # поток логики приложения
         self.th3 = LogicThread(main_window=self)
@@ -128,6 +137,9 @@ class MainApp(QtWidgets.QMainWindow, design_main.Ui_MainWindow):
         self.camera_label7.setPixmap(QPixmap.fromImage(image))
         self.camera_label8.setPixmap(QPixmap.fromImage(image))
         self.camera_label9.setPixmap(QPixmap.fromImage(image))
+        self.camera_label10.setPixmap(QPixmap.fromImage(image))
+        self.camera_label11.setPixmap(QPixmap.fromImage(image))
+        self.camera_label12.setPixmap(QPixmap.fromImage(image))
 
     @pyqtSlot(QImage)
     def setImage1(self, image):
@@ -289,11 +301,11 @@ class MainApp(QtWidgets.QMainWindow, design_main.Ui_MainWindow):
 
     def parse_k(self, text):
         try:
-            result = re.match(r'^\d+\.\d*$', text)
+            result = re.match(r'^\d+\.*\d*$', text)
             if result is None:
                 raise ValueError
             result = float(result.group(0))
-            if result > 20.0 and result < 0.0:
+            if result > 20.0 or result < 1.0:
                 raise ValueError
             k = result
             return k

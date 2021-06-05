@@ -1,9 +1,1 @@
-{"1_painted": {"min_H": 70, "min_S": 120, "min_V": 20,
-    "max_H": 90, "max_S": 255, "max_V": 180},
-"1_original": {"source": "Image",
-    "filename": "/home/vlad/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/OpenCV/\u041a\u0443\u0440\u0441\u0430\u0447/prj/scheme_photos/waka.jpg",
-    "DELTA": 0.005, "image filtration": true},
-"1_closing_opening": {"closing_kx": 2.5, "closing_ky": 2.5, "opening_kx": 1.0, "opening_ky": 1.0},
-"1_result": {"image rotation": true},
-"2_paint_resistors": {"min_H": 83, "min_S": 21, "min_V": 170,
-           "max_H": 105, "max_S": 85, "max_V": 240}}
+{"1_painted": {"min_H": 35, "min_S": 40, "min_V": 30, "max_H": 85, "max_S": 255, "max_V": 200}, "1_original": {"source": "Image", "filename": "/home/vlad/\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0441\u0442\u043e\u043b/\u0422\u0435\u0441\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435/test12.jpg", "DELTA": 0.05, "image filtration": true}, "1_closing_opening": {"closing_kx": 1.0, "closing_ky": 1.0, "opening_kx": 2.0, "opening_ky": 3.0}, "1_result": {"image rotation": true}, "2_paint_resistors": {"min_H": 85, "min_S": 15, "min_V": 110, "max_H": 160, "max_S": 140, "max_V": 220}}
